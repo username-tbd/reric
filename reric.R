@@ -31,3 +31,18 @@ nice_ecdf <- function() {
     )
   )
 }
+
+notebook_load <- function(loading_function, file, overwrite = FALSE) {
+  if (overwrite || !file.exists(file)) {
+    data <- loading_function()
+    saveRDS(data, file = file)
+    return(data)
+  } else {
+    return(readRDS(file))
+  }
+}
+
+query_snowflake_clean <- function(conn, query_file) {
+  dbGetQuery(conn, read_file(query_file)) |>
+    clean_names()
+}
